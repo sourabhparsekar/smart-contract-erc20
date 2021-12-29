@@ -9,7 +9,7 @@ import "./IERC20.sol";
 contract Token is IERC20 {
     string public constant name = "ERC20-Demo-Contract";
     string public constant symbol = "ERC-Demo-Contract";
-    uint8 public constant decimals = 2; // 18 is default decimal places, for simplicity it is considered as 2 
+    uint8 public constant decimals = 2; // 18 is default decimal places, for simplicity it is considered as 2
 
     mapping(address => uint256) public balances;
 
