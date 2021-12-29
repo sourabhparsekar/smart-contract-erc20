@@ -4,17 +4,31 @@ const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const web3 = createAlchemyWeb3(alchemyKey);
 
 const contractABI = require("../contract-abi.json");
-const contractAddress = process.env.CONTRACT_ADDRESS;
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
 
-export const helloWorldContract = new web3.eth.Contract(
+console.log('Alchemy Key - ' + alchemyKey)
+console.log('Contract Address - ' + contractAddress)
+
+export const smartContract = new web3.eth.Contract(
   contractABI,
   contractAddress
 );
 
-export const loadCurrentMessage = async () => {
-  const message = await helloWorldContract.methods.message().call();
+export const loadContractName = async () => {
+  const message = await smartContract.methods.name().call();
   return message;
 };
+
+export const loadContractSymbol = async () => {
+  const message = await smartContract.methods.symbol().call();
+  return message;
+};
+
+export const loadContractTotalSupply = async () => {
+  const message = await smartContract.methods.totalSupply().call();
+  return message;
+};
+
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -41,7 +55,7 @@ export const connectWallet = async () => {
           <p>
             {" "}
             🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
+            <a target="_blank" rel="noreferrer" href={`https://metamask.io/download.html`}>
               You must install Metamask, a virtual Ethereum wallet, in your
               browser.
             </a>
@@ -83,7 +97,7 @@ export const getCurrentWalletConnected = async () => {
           <p>
             {" "}
             🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
+            <a target="_blank" rel="noreferrer" href={`https://metamask.io/download.html`}>
               You must install Metamask, a virtual Ethereum wallet, in your
               browser.
             </a>
@@ -112,7 +126,7 @@ export const updateMessage = async (address, message) => {
   const transactionParameters = {
     to: contractAddress, // Required except during contract publications.
     from: address, // must match user's active address.
-    data: helloWorldContract.methods.update(message).encodeABI(),
+    data: smartContract.methods.update(message).encodeABI(),
   };
 
   //sign the transaction
@@ -125,7 +139,7 @@ export const updateMessage = async (address, message) => {
       status: (
         <span>
           ✅{" "}
-          <a target="_blank" href={`https://ropsten.etherscan.io/tx/${txHash}`}>
+          <a target="_blank" rel="noreferrer" href={`https://ropsten.etherscan.io/tx/${txHash}`}>
             View the status of your transaction on Etherscan!
           </a>
           <br />

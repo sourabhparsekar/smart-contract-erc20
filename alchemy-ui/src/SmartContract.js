@@ -1,47 +1,50 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import {
-  helloWorldContract,
   connectWallet,
-  updateMessage,
-  loadCurrentMessage,
   getCurrentWalletConnected,
+  loadContractName,
+  loadContractSymbol,
+  loadContractTotalSupply
 } from "./util/interact.js";
 
 import alchemylogo from "./alchemylogo.svg";
 
-const HelloWorld = () => {
+const SmartContract = () => {
   //state variables
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
-  const [message, setMessage] = useState("No connection to the network."); //default message
+  const [name, setName] = useState("No connection to the network."); //default message
+  const [symbol, setSymbol] = useState("No connection to the network."); //default message
+  const [totalSupply, setTotalSupply] = useState("No connection to the network."); //default message
   const [newMessage, setNewMessage] = useState("");
 
   //called only once
-  useEffect(async () => {
-    const message = await loadCurrentMessage();
-    setMessage(message);
-    addSmartContractListener();
+  useEffect(() => {
 
-    const { address, status } = await getCurrentWalletConnected();
+    async function setup() {
+      const name = await loadContractName();
+      setName(name);
 
-    setWallet(address);
-    setStatus(status);
+      const symbol = await loadContractSymbol();
+      setSymbol(symbol);
 
-    addWalletListener();
+      const totalSupply = await loadContractTotalSupply();
+      setTotalSupply(totalSupply);
+
+
+      const { address, status } = await getCurrentWalletConnected();
+
+      setWallet(address);
+
+      setStatus(status);
+
+      addWalletListener();
+
+    }
+    setup();
   }, []);
 
-  function addSmartContractListener() {
-    helloWorldContract.events.UpdatedMessages({}, (error, data) => {
-      if (error) {
-        setStatus("😥 " + error.message);
-      } else {
-        setMessage(data.returnValues[1]);
-        setNewMessage("");
-        setStatus("🎉 Your message has been updated!");
-      }
-    });
-  }
 
   function addWalletListener() {
     if (window.ethereum) {
@@ -59,7 +62,7 @@ const HelloWorld = () => {
         <p>
           {" "}
           🦊{" "}
-          <a target="_blank" href={`https://metamask.io/download.html`}>
+          <a target="_blank" rel="noreferrer" href={`https://metamask.io/download.html`}>
             You must install Metamask, a virtual Ethereum wallet, in your
             browser.
           </a>
@@ -75,14 +78,14 @@ const HelloWorld = () => {
   };
 
   const onUpdatePressed = async () => {
-    const { status } = await updateMessage(walletAddress, newMessage);
-    setStatus(status);
+    // const { status } = await updateMessage(walletAddress, newMessage);
+    // setStatus(status);
   };
 
   //the UI of our component
   return (
     <div id="container">
-      <img id="logo" src={alchemylogo}></img>
+      <img id="logo" src={alchemylogo} alt="logo"></img>
       <button id="walletButton" onClick={connectWalletPressed}>
         {walletAddress.length > 0 ? (
           "Connected: " +
@@ -94,8 +97,9 @@ const HelloWorld = () => {
         )}
       </button>
 
-      <h2 style={{ paddingTop: "50px" }}>Current Message:</h2>
-      <p>{message}</p>
+      <p style={{ paddingTop: "50px" }}><b>Token Name:</b> {name}</p>
+      <p><b>Token Symbol:</b> {symbol}</p>
+      <p><b>Total Supply:</b> {totalSupply}</p>
 
       <h2 style={{ paddingTop: "18px" }}>New Message:</h2>
 
@@ -116,4 +120,4 @@ const HelloWorld = () => {
   );
 };
 
-export default HelloWorld;
+export default SmartContract;
