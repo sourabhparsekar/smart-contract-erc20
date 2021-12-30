@@ -5,7 +5,10 @@ import {
   getCurrentWalletConnected,
   loadContractName,
   loadContractSymbol,
-  loadContractTotalSupply
+  loadContractTotalSupply,
+  loadContractDecimals,
+  getAccountBalance,
+  transferBalance
 } from "./util/interact.js";
 
 import alchemylogo from "./alchemylogo.svg";
@@ -14,10 +17,15 @@ const SmartContract = () => {
   //state variables
   const [walletAddress, setWallet] = useState("");
   const [status, setStatus] = useState("");
+  const [balanceAddress, setBalanceAddress] = useState("");
+  const [balanceStatus, setBalanceStatus] = useState("");
+  const [transferAddress, setTransferAddress] = useState("");
+  const [transferAmount, setTransferAmount] = useState("");
+  const [transferStatus, setTransferStatus] = useState("");
   const [name, setName] = useState("No connection to the network."); //default message
   const [symbol, setSymbol] = useState("No connection to the network."); //default message
   const [totalSupply, setTotalSupply] = useState("No connection to the network."); //default message
-  const [newMessage, setNewMessage] = useState("");
+  const [decimals, setDecimals] = useState("No connection to the network."); //default message
 
   //called only once
   useEffect(() => {
@@ -32,6 +40,8 @@ const SmartContract = () => {
       const totalSupply = await loadContractTotalSupply();
       setTotalSupply(totalSupply);
 
+      const decimals = await loadContractDecimals();
+      setDecimals(decimals);
 
       const { address, status } = await getCurrentWalletConnected();
 
@@ -51,7 +61,7 @@ const SmartContract = () => {
       window.ethereum.on("accountsChanged", (accounts) => {
         if (accounts.length > 0) {
           setWallet(accounts[0]);
-          setStatus("👆🏽 Write a message in the text-field above.");
+          setStatus("👆🏽 Populate the Data and Click on Button to execute...");
         } else {
           setWallet("");
           setStatus("🦊 Connect to Metamask using the top right button.");
@@ -77,9 +87,14 @@ const SmartContract = () => {
     setWallet(walletResponse.address);
   };
 
-  const onUpdatePressed = async () => {
-    // const { status } = await updateMessage(walletAddress, newMessage);
-    // setStatus(status);
+  const onGetBalancePressed = async () => {
+    const status = await getAccountBalance(balanceAddress);
+    setBalanceStatus(status);
+  };
+
+  const onTransferBalancePressed = async () => {
+    const { status } = await transferBalance(walletAddress, transferAddress, transferAmount);
+    setTransferStatus(status);
   };
 
   //the UI of our component
@@ -97,25 +112,47 @@ const SmartContract = () => {
         )}
       </button>
 
-      <p style={{ paddingTop: "50px" }}><b>Token Name:</b> {name}</p>
-      <p><b>Token Symbol:</b> {symbol}</p>
-      <p><b>Total Supply:</b> {totalSupply}</p>
+      <p style={{ paddingTop: "50px" }}><b>Token Name:</b> {name} &nbsp;&nbsp; <b>Token Symbol:</b> {symbol}</p>
+      <p><b>Total Supply:</b> {totalSupply} &nbsp;&nbsp; <b>Decimals:</b> {decimals}</p>
+      <p id="status">{status}</p>
 
-      <h2 style={{ paddingTop: "18px" }}>New Message:</h2>
-
+      <h2 style={{ paddingTop: "5px" }}>Get Balance:</h2>
       <div>
         <input
           type="text"
-          placeholder="Update the message in your smart contract."
-          onChange={(e) => setNewMessage(e.target.value)}
-          value={newMessage}
+          placeholder="Enter Wallet address 0x..."
+          onChange={(e) => setBalanceAddress(e.target.value)}
+          value={balanceAddress}
         />
-        <p id="status">{status}</p>
+        <p id="status">{balanceStatus}</p>
 
-        <button id="publish" onClick={onUpdatePressed}>
-          Update
+        <button id="publish" onClick={onGetBalancePressed}>
+          Get Balance
         </button>
       </div>
+
+      <h2 style={{ paddingTop: "5px" }}>Transfer Balance:</h2>
+      <div>
+        <input
+          type="text"
+          placeholder="Enter Wallet address 0x..."
+          onChange={(e) => setTransferAddress(e.target.value)}
+          value={transferAddress}
+        />
+        <input
+          type="text"
+          placeholder="Enter Amount to be transferred"
+          onChange={(e) => setTransferAmount(e.target.value)}
+          value={transferAmount}
+        />
+        <p id="status">{transferStatus}</p>
+
+        <button id="publish" onClick={onTransferBalancePressed}>
+          Transfer Balance
+        </button>
+      </div>
+
+
     </div>
   );
 };

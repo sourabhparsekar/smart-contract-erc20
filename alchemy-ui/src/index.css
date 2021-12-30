@@ -68,7 +68,7 @@ button {
   font-weight: bold;
   cursor:pointer;
   min-width: 160px;
-  margin-top: 70px;
+  /*margin-top: 70px;*/
   font-family: Rubik, sans-serif;
 }
 

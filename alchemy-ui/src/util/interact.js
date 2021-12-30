@@ -29,6 +29,10 @@ export const loadContractTotalSupply = async () => {
   return message;
 };
 
+export const loadContractDecimals = async () => {
+  const message = await smartContract.methods.decimals().call();
+  return message;
+};
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -75,7 +79,7 @@ export const getCurrentWalletConnected = async () => {
       if (addressArray.length > 0) {
         return {
           address: addressArray[0],
-          status: "👆🏽 Write a message in the text-field above.",
+          status: "👆🏽 Populate the Data and Click on Button to execute...",
         };
       } else {
         return {
@@ -108,7 +112,7 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-export const updateMessage = async (address, message) => {
+export const getAccountBalance = async (address) => {
   //input error handling
   if (!window.ethereum || address === null) {
     return {
@@ -117,16 +121,25 @@ export const updateMessage = async (address, message) => {
     };
   }
 
-  if (message.trim() === "") {
+  const message = await smartContract.methods.balances(address).call();
+  return message;
+
+};
+
+export const transferBalance = async (address, transferAddress, amount) => {
+  //input error handling
+  if (!window.ethereum || address === null || transferAddress === null) {
     return {
-      status: "❌ Your message cannot be an empty string.",
+      status:
+        "💡 Connect your Metamask wallet to update the message on the blockchain.",
     };
   }
+
   //set up transaction parameters
   const transactionParameters = {
     to: contractAddress, // Required except during contract publications.
     from: address, // must match user's active address.
-    data: smartContract.methods.update(message).encodeABI(),
+    data: smartContract.methods.transfer(transferAddress, amount).encodeABI(),
   };
 
   //sign the transaction
@@ -142,9 +155,6 @@ export const updateMessage = async (address, message) => {
           <a target="_blank" rel="noreferrer" href={`https://ropsten.etherscan.io/tx/${txHash}`}>
             View the status of your transaction on Etherscan!
           </a>
-          <br />
-          ℹ️ Once the transaction is verified by the network, the message will
-          be updated automatically.
         </span>
       ),
     };
