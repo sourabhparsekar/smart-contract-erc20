@@ -1,0 +1,32 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'org.web3j' version '4.8.9'	//Web3J Plugin to interact with Smart Contract
+}
+
+solidity {
+	executable = 'src/main/resources/solc-windows.exe'	// Path to Solc Compiler file
+	version = '0.8.0'
+}
+
+group = 'com.ethereum'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.web3j:core:4.8.7'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

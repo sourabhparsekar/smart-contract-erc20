@@ -1,0 +1,4 @@
+- added solc compiler in resources folder
+- added web3j plugin in build.gradle
+- added solidity configuration in build.gradle
+- added web3j dependency in build.gradle
