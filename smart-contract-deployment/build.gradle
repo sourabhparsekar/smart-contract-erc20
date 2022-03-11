@@ -24,9 +24,28 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.web3j:core:4.8.7'
+
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.6'
+
+	//modern day lightweight json library + adapters
+	// https://mvnrepository.com/artifact/com.squareup.moshi/moshi
+	implementation group: 'com.squareup.moshi', name: 'moshi', version: '1.13.0'
+	// https://mvnrepository.com/artifact/com.squareup.moshi/moshi-adapters
+	runtimeOnly group: 'com.squareup.moshi', name: 'moshi-adapters', version: '1.13.0'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+node {
+	nodeModulesDir = file("${project.projectDir}/src/main/node")
+	version  = '12.16.1'
+	download = false
+	distBaseUrl = 'http://nodejs.org/dist'
+	npmWorkDir = file("${project.projectDir}/src/main/node")
+	workDir = file("${project.projectDir}/src/main/node")
+}
+

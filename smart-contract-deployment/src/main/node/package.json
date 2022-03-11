@@ -1,0 +1,17 @@
+{
+  "name": "smart-contract-deployment",
+  "version": "1.0.0",
+  "author": {
+    "email": "sourabhanant@gmail.com",
+    "name": "Sourabh Parsekar",
+    "url": "https://sourabhparsekar.medium.com/"
+  },
+  "description": "Smart Contract Deployment and Testing",
+  "license": "Apache-2.0",
+  "repository": {
+    "url": "https://github.com/sourabhparsekar/smart-contract-erc20",
+    "directory": "smart-contract-deployment",
+    "type": "remote"
+  },
+  "dependencies": {}
+}
