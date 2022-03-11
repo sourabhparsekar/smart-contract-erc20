@@ -1,6 +1,6 @@
 package com.ethereum.smartcontract.configuration;
 
-import com.ethereum.smartcontract.Constants;
+import com.ethereum.smartcontract.utils.Constants;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -21,7 +21,7 @@ import java.util.Collections;
 @Configuration
 public class OpenApiSpecificationSwaggerConfig {
 
-    static final String SECURITY_SCHEME_NAME = "Alchemy URL";
+    static final String ETHER = "Alchemy URL";
 
     /**
      * Open API Configuration Bean
@@ -38,19 +38,24 @@ public class OpenApiSpecificationSwaggerConfig {
             @Value("${openapi.description}") final String description
     ) {
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
+                .addSecurityItem(new SecurityRequirement().addList("Ethereum Node URL").addList("Private Key"))
                 .components(
                         new Components()
                                 .addSecuritySchemes(
-                                        SECURITY_SCHEME_NAME,
+                                        "Ethereum Node URL",
                                         new SecurityScheme()
-                                                .name(Constants.ALCHEMY_URL_HEADER)
+                                                .name(Constants.ETHEREUM_NODE_URL)
                                                 .type(SecurityScheme.Type.APIKEY)
                                                 .in(SecurityScheme.In.HEADER)
-                                        .description("To generate url, refer https://docs.alchemy.com/alchemy/introduction/getting-started")
-
-
-
+                                                .description("To generate alchemy url, refer https://docs.alchemy.com/alchemy/introduction/getting-started")
+                                )
+                                .addSecuritySchemes(
+                                        "Private Key",
+                                        new SecurityScheme()
+                                                .name(Constants.PRIVATE_KEY)
+                                                .type(SecurityScheme.Type.APIKEY)
+                                                .in(SecurityScheme.In.HEADER)
+                                                .description("Private Key to generate Credentials.")
 
                                 )
                 )

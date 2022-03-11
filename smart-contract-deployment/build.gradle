@@ -2,11 +2,11 @@ plugins {
 	id 'org.springframework.boot' version '2.6.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id 'org.web3j' version '4.8.9'	//Web3J Plugin to interact with Smart Contract
+	id 'org.web3j' version '4.8.7'	//Web3J Plugin to interact with Smart Contract
 }
 
 solidity {
-	executable = 'src/main/resources/solc-windows.exe'	// Path to Solc Compiler file
+	executable = './src/main/resources/solc-windows.exe'	// Path to Solc Compiler file
 	version = '0.8.0'
 }
 
@@ -33,6 +33,10 @@ dependencies {
 	implementation group: 'com.squareup.moshi', name: 'moshi', version: '1.13.0'
 	// https://mvnrepository.com/artifact/com.squareup.moshi/moshi-adapters
 	runtimeOnly group: 'com.squareup.moshi', name: 'moshi-adapters', version: '1.13.0'
+
+	//added to overcome the okhttp issue - https://github.com/web3j/web3j/issues/1271
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
 
 }
 
