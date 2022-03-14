@@ -22,6 +22,8 @@ import java.util.Collections;
 public class OpenApiSpecificationSwaggerConfig {
 
     static final String ETHER = "Alchemy URL";
+    public static final String PRIVATE_KEY = "Private Key";
+    public static final String ETHEREUM_NODE_URL = "Ethereum Node URL";
 
     /**
      * Open API Configuration Bean
@@ -38,11 +40,11 @@ public class OpenApiSpecificationSwaggerConfig {
             @Value("${openapi.description}") final String description
     ) {
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("Ethereum Node URL").addList("Private Key"))
+                .addSecurityItem(new SecurityRequirement().addList(ETHEREUM_NODE_URL).addList(PRIVATE_KEY))
                 .components(
                         new Components()
                                 .addSecuritySchemes(
-                                        "Ethereum Node URL",
+                                        ETHEREUM_NODE_URL,
                                         new SecurityScheme()
                                                 .name(Constants.ETHEREUM_NODE_URL)
                                                 .type(SecurityScheme.Type.APIKEY)
@@ -50,13 +52,12 @@ public class OpenApiSpecificationSwaggerConfig {
                                                 .description("To generate alchemy url, refer https://docs.alchemy.com/alchemy/introduction/getting-started")
                                 )
                                 .addSecuritySchemes(
-                                        "Private Key",
+                                        PRIVATE_KEY,
                                         new SecurityScheme()
                                                 .name(Constants.PRIVATE_KEY)
                                                 .type(SecurityScheme.Type.APIKEY)
                                                 .in(SecurityScheme.In.HEADER)
                                                 .description("Private Key to generate Credentials.")
-
                                 )
                 )
                 .info(new Info()
