@@ -21,9 +21,10 @@ import java.util.Collections;
 @Configuration
 public class OpenApiSpecificationSwaggerConfig {
 
-    static final String ETHER = "Alchemy URL";
     public static final String PRIVATE_KEY = "Private Key";
     public static final String ETHEREUM_NODE_URL = "Ethereum Node URL";
+    public static final String CONTRACT_ADDRESS = "Smart Contract Address";
+    static final String ETHER = "Alchemy URL";
 
     /**
      * Open API Configuration Bean
@@ -40,7 +41,7 @@ public class OpenApiSpecificationSwaggerConfig {
             @Value("${openapi.description}") final String description
     ) {
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList(ETHEREUM_NODE_URL).addList(PRIVATE_KEY))
+                .addSecurityItem(new SecurityRequirement().addList(ETHEREUM_NODE_URL).addList(PRIVATE_KEY).addList(CONTRACT_ADDRESS))
                 .components(
                         new Components()
                                 .addSecuritySchemes(
@@ -58,6 +59,14 @@ public class OpenApiSpecificationSwaggerConfig {
                                                 .type(SecurityScheme.Type.APIKEY)
                                                 .in(SecurityScheme.In.HEADER)
                                                 .description("Private Key to generate Credentials.")
+                                )
+                                .addSecuritySchemes(
+                                        CONTRACT_ADDRESS,
+                                        new SecurityScheme()
+                                                .name(Constants.CONTRACT_ADDRESS)
+                                                .type(SecurityScheme.Type.APIKEY)
+                                                .in(SecurityScheme.In.HEADER)
+                                                .description("Contract Address is generated after deployment")
                                 )
                 )
                 .info(new Info()

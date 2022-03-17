@@ -1,6 +1,7 @@
 package com.ethereum.smartcontract.controller;
 
 import com.ethereum.smartcontract.model.ContractDeploy;
+import com.ethereum.smartcontract.model.TransactionResponse;
 import com.ethereum.smartcontract.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-class SmartContractControllerTest {
+class DeploymentControllerTest {
 
     @InjectMocks
-    private SmartContractController smartContractController;
+    private DeploymentController deploymentController;
 
     private MockHttpServletRequest httpServletRequest;
 
@@ -38,7 +39,7 @@ class SmartContractControllerTest {
         ContractDeploy contractDeploy = new ContractDeploy();
         contractDeploy.setInitialAmount(100L);
 
-        ResponseEntity<String> data = smartContractController.deploySmartContract(contractDeploy, httpServletRequest, httpServletResponse);
+        ResponseEntity<TransactionResponse> data = deploymentController.deploySmartContract(contractDeploy, httpServletRequest, httpServletResponse);
 
 
     }
