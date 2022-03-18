@@ -1,0 +1,55 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'org.web3j' version '4.8.7'	//Web3J Plugin to interact with Smart Contract
+}
+
+solidity {
+	executable = './src/main/resources/solc-windows.exe'	// Path to Solc Compiler file
+	version = '0.8.0'
+}
+
+group = 'com.ethereum'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.6'
+
+	//modern day lightweight json library + adapters
+	// https://mvnrepository.com/artifact/com.squareup.moshi/moshi
+	implementation group: 'com.squareup.moshi', name: 'moshi', version: '1.13.0'
+	// https://mvnrepository.com/artifact/com.squareup.moshi/moshi-adapters
+	runtimeOnly group: 'com.squareup.moshi', name: 'moshi-adapters', version: '1.13.0'
+
+	//added to overcome the okhttp issue - https://github.com/web3j/web3j/issues/1271
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+node {
+	nodeModulesDir = file("${project.projectDir}/src/main/node")
+	version  = '12.16.1'
+	download = false
+	distBaseUrl = 'http://nodejs.org/dist'
+	npmWorkDir = file("${project.projectDir}/src/main/node")
+	workDir = file("${project.projectDir}/src/main/node")
+}
+
